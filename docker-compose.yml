@@ -1,0 +1,31 @@
+version: '3'
+
+networks:
+  bridgx_net:
+
+services:
+  #######################  bridgx 1.0  ########################
+  mysql_schedulx:
+    container_name: mariadb-server
+    image: yobasystems/alpine-mariadb:10.5.11
+    environment:
+      MYSQL_ROOT_PASSWORD: mtQ8chN2
+      MYSQL_DATABASE: schedulx
+      MYSQL_USER: gf
+      MYSQL_PASSWORD: db@galaxy-future.com
+    ports:
+      - 3316:3306
+    volumes:
+      - ./init/mysql:/docker-entrypoint-initdb.d/
+    restart: always
+
+  schedulx:
+    container_name: gf-ops-schedulx
+    image: "schedulx_api"
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    command: [ "bin/wait-for-schedulx.sh" ]
+    depends_on:
+      - mysql_schedulx
