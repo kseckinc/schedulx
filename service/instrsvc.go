@@ -495,6 +495,11 @@ func (s *InstrSvc) CreateServiceEnvInstr(ctx context.Context, args *types.Servic
 func (s *InstrSvc) CreateMountSlbInstr(ctx context.Context, args *types.ParamsMount, tmplId, revTmplId int64, needReverse bool, dbo *gorm.DB) (int64, int64, error) {
 	//创建 instruction
 	var err error
+	if ok := IsAlibabaCloudAccountValid(config.GlobalConfig.AlibabaCloudAccount); !ok {
+		err = errors.New("invalid AlibabaCloudAccount Config")
+		log.Logger.Error(err)
+		return 0, 0, err
+	}
 	params, _ := jsoniter.MarshalToString(&nodeact.ParamsMountInfo{
 		MountType:  args.MountType,
 		MountValue: args.MountValue,

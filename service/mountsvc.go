@@ -29,9 +29,9 @@ var mountOnce sync.Once
 func GetMountSvcInst() *MountService {
 	mountOnce.Do(func() {
 		mountServiceInstance = &MountService{}
-		slbClient, _ = aliyun.InitALB(config.GlobalConfig.AliYunAccount.Region,
-			config.GlobalConfig.AliYunAccount.AccessKey,
-			config.GlobalConfig.AliYunAccount.Secret) //
+		slbClient, _ = aliyun.InitALB(config.GlobalConfig.AlibabaCloudAccount.Region,
+			config.GlobalConfig.AlibabaCloudAccount.AccessKey,
+			config.GlobalConfig.AlibabaCloudAccount.Secret) //
 	})
 	return mountServiceInstance
 }
@@ -44,7 +44,6 @@ func (mou *MountService) Mount(ctx context.Context, svcReq *ExposeMountSvcReq) (
 	// 分页添加
 	insListLen := len(svcReq.InstanceList)
 	insListInfo := svcReq.InstanceList
-
 	ipInner := []string{}
 	serverList := []alb.AddServersToServerGroupServers{}
 	if insListLen < constant.ALIYUNAddServerGroupLenMax {
