@@ -175,6 +175,30 @@ func (s *InstrSvc) bridgXShrinkAction(ctx context.Context, schedTaskId int64, br
 			_ = taskRepo.UpdateTaskStep(ctx, schedTaskId, types.TaskStepBridgxShrinkSucc, "")
 		}
 	}()
+	if bridgXSvcReq.InstGroup == nil || len(bridgXSvcReq.InstGroup.InstanceList) == 0 {
+		// 主动获取 instances
+		log.Logger.Infof("fetch InstanceList")
+		instRepo := repository.GetInstanceRepoIns()
+		insts, err := instRepo.InstsQueryByTaskId(ctx, bridgXSvcReq.TaskId, "", nil)
+		if err != nil {
+			log.Logger.Error(err)
+			return nil, err
+		}
+		instanceList := make([]*types.InstanceInfo, 0, len(insts))
+		for _, inst := range insts {
+			item := &types.InstanceInfo{
+				IpInner:    inst.IpInner,
+				IpOuter:    inst.IpOuter,
+				InstanceId: inst.InstanceId,
+			}
+			instanceList = append(instanceList, item)
+		}
+		bridgXSvcReq.InstGroup = &nodeact.InstanceGroup{
+			TaskId:       bridgXSvcReq.TaskId,
+			InstanceList: instanceList,
+		}
+		bridgXSvcReq.Count = int64(len(instanceList))
+	}
 	resp := &InstrSvcResp{}
 	bridgXSvc = GetBridgXSvcInst()
 	svcResp, err := bridgXSvc.ExecAct(ctx, bridgXSvcReq, bridgXSvc.Shrink)
@@ -471,6 +495,11 @@ func (s *InstrSvc) CreateServiceEnvInstr(ctx context.Context, args *types.Servic
 func (s *InstrSvc) CreateMountSlbInstr(ctx context.Context, args *types.ParamsMount, tmplId, revTmplId int64, needReverse bool, dbo *gorm.DB) (int64, int64, error) {
 	//创建 instruction
 	var err error
+	if ok := IsAlibabaCloudAccountValid(config.GlobalConfig.AlibabaCloudAccount); !ok {
+		err = errors.New("invalid AlibabaCloudAccount Config")
+		log.Logger.Error(err)
+		return 0, 0, err
+	}
 	params, _ := jsoniter.MarshalToString(&nodeact.ParamsMountInfo{
 		MountType:  args.MountType,
 		MountValue: args.MountValue,
