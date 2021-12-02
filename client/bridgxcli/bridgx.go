@@ -93,7 +93,7 @@ func (c *BridgXClient) ClusterExpand(ctx context.Context, cliReq *ClusterExpandR
 	_, err = c.httpClient.R().SetBody(params).SetResult(resp).SetError(resp).SetAuthToken(authToken).Post(url)
 	log.Logger.Infof("url:%+v", url)
 	log.Logger.Infof("params:%+v", tool.ToJson(params))
-	log.Logger.Infof("resp:%+v", resp)
+	log.Logger.Infof("resp:%+v", tool.ToJson(resp))
 	if err != nil {
 		log.Logger.Error(err)
 		return nil, err
