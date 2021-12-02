@@ -69,16 +69,21 @@ func (r *TaskRepo) UpdateTaskRelationTaskId(ctx context.Context, taskId int64, f
 		log.Logger.Error(err)
 		return err
 	}
-	rTaskIdMap := make(map[string]interface{})
+	rtd := &types.RelationTaskId{}
 	if obj.RelationTaskId != "" {
-		err = jsoniter.Unmarshal([]byte(obj.RelationTaskId), &rTaskIdMap)
+		err = jsoniter.Unmarshal([]byte(obj.RelationTaskId), &rtd)
 		if err != nil {
 			log.Logger.Error(err)
 			return err
 		}
 	}
-	rTaskIdMap[field] = relationTaskId
-	value, _ := jsoniter.Marshal(rTaskIdMap)
+	switch field {
+	case types.BridgXTaskId:
+		rtd.BridgXTaskId = relationTaskId
+	case types.NodeactTaskId:
+		rtd.NodeActTaskId = relationTaskId
+	}
+	value, _ := jsoniter.Marshal(rtd)
 	data := map[string]interface{}{
 		"relation_task_id": value,
 	}

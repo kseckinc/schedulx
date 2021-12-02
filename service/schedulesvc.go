@@ -262,10 +262,10 @@ func (s *ScheduleSvc) doInstr(ctx context.Context, instrSvcReq *InstrSvcReq) err
 	case instrSvc.BridgXExpand: // 给下一轮赋值参数
 		instrSvcReq.NodeActSvcReq.InstGroup = instrSvcResp.BridgXSvcResp.InstGroup
 		instrSvcReq.NodeActSvcReq.Auth = instrSvcResp.BridgXSvcResp.Auth
-		err = taskRepo.UpdateTaskRelationTaskId(ctx, instrSvcReq.ScheduleTaskId, "bridgx_task_id", instrSvcResp.BridgXSvcResp.TaskId)
+		err = taskRepo.UpdateTaskRelationTaskId(ctx, instrSvcReq.ScheduleTaskId, types.BridgXTaskId, instrSvcResp.BridgXSvcResp.TaskId)
 	case instrSvc.NodeActInitBase:
 		instrSvcReq.NodeActSvcReq.InstGroup = instrSvcResp.NodeActSvcResp.InstGroup
-		err = taskRepo.UpdateTaskRelationTaskId(ctx, instrSvcReq.ScheduleTaskId, "nodeact_task_id", instrSvcResp.NodeActSvcResp.InstGroup.TaskId)
+		err = taskRepo.UpdateTaskRelationTaskId(ctx, instrSvcReq.ScheduleTaskId, types.NodeactTaskId, instrSvcResp.NodeActSvcResp.InstGroup.TaskId)
 	case instrSvc.NodeActInitSvc:
 		instrSvcReq.NodeActSvcReq.InstGroup = instrSvcResp.NodeActSvcResp.InstGroup
 	case instrSvc.MountSLB:
