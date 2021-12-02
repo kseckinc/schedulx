@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/galaxy-future/schedulx/api/types"
-	"github.com/galaxy-future/schedulx/client"
 	"github.com/galaxy-future/schedulx/client/bridgxcli"
 	"github.com/galaxy-future/schedulx/pkg/bridgx"
 	"github.com/galaxy-future/schedulx/pkg/nodeact"
@@ -103,7 +102,7 @@ func (s *BridgXSvc) expandAction(ctx context.Context, clusterName string, count 
 	if err != nil {
 		return nil, err
 	}
-	resp.TaskId = tool.Interface2Int64(httpResp.Data)
+	resp.TaskId = httpResp.Data
 	return resp, err
 }
 
@@ -131,13 +130,12 @@ func (s *BridgXSvc) pollQueryExpandAction(ctx context.Context, taskId int64) (*B
 				return
 			}
 			time.Sleep(3 * time.Second)
-			var httpResp *client.HttpResp
-			httpResp, err = bCli.TaskDescribe(ctx, cliReq)
+			httpResp, err := bCli.TaskDescribe(ctx, cliReq)
 			if err != nil {
 				errCnt++
 				continue
 			}
-			taskDescribe = httpResp.Data.(*bridgx.TaskDescribe)
+			taskDescribe = httpResp.Data
 			if s.RatePass(taskDescribe.SuccessRate) { //TODO DELETE
 				queryTaskC <- true
 				return
@@ -176,15 +174,14 @@ func (s *BridgXSvc) pollQueryExpandAction(ctx context.Context, taskId int64) (*B
 	}
 	for {
 		cliReq2.PageNum = int64(pageNum)
-		var httpResp *client.HttpResp
-		httpResp, err = bCli.TaskInstances(ctx, cliReq2)
+		httpResp, err := bCli.TaskInstances(ctx, cliReq2)
 		if err != nil {
 			if err != nil {
 				log.Logger.Errorf("task/instances 信息查询异常:%v | task_id:%d", err, taskId)
 				return nil, err
 			}
 		}
-		taskInstancesData := httpResp.Data.(*bridgx.TaskInstancesData)
+		taskInstancesData := httpResp.Data
 		if pageNum == 1 {
 			InstanceList = make([]*types.InstanceInfo, 0, taskInstancesData.Pager.Total)
 		}
@@ -231,7 +228,7 @@ func (s *BridgXSvc) shrinkAction(ctx context.Context, taskId int64, clusterName 
 	if err != nil {
 		return nil, err
 	}
-	resp.TaskId = tool.Interface2Int64(httpResp.Data)
+	resp.TaskId = httpResp.Data
 
 	return resp, err
 }
@@ -258,13 +255,12 @@ func (s *BridgXSvc) poolQueryShrinkAction(ctx context.Context, taskId int64) (*B
 				return
 			}
 			time.Sleep(5 * time.Second)
-			var httpResp *client.HttpResp
-			httpResp, err = bCli.TaskDescribe(ctx, cliReq)
+			httpResp, err := bCli.TaskDescribe(ctx, cliReq)
 			if err != nil {
 				errCnt++
 				continue
 			}
-			taskDescribe = httpResp.Data.(*bridgx.TaskDescribe)
+			taskDescribe = httpResp.Data
 			if s.RatePass(taskDescribe.SuccessRate) {
 				queryTaskC <- true
 				return
@@ -302,7 +298,7 @@ func (s *BridgXSvc) getClusterAction(ctx context.Context, clusterName string) (*
 	if err != nil {
 		return nil, err
 	}
-	clusterInfo := httpResp.Data.(*bridgx.ClusterInfo)
+	clusterInfo := httpResp.Data
 	resp.Auth = &types.InstanceAuth{
 		UserName: clusterInfo.UserName,
 		Pwd:      clusterInfo.Pwd,
