@@ -20,13 +20,13 @@ SchedulX 是基于开源 BridgX 项目的云原生服务编排和部署解决方
 
 2、环境依赖
 
-SchedulX依赖BridgX和BridgX_FE，请根据[安装指南](hhttps://github.com/galaxy-future/BridgX/blob/dev/README.md)安装BridgX和BridgX_FE。要求内网部署环境，能够跟云厂商vpc连通。
+SchedulX依赖BridgX和BridgX_FE，请根据[安装指南](https://github.com/galaxy-future/bridgx/blob/dev/README.md)安装bridgx和comandx。要求内网部署环境，能够跟云厂商vpc连通。
 
 3、安装步骤
 
 * (1)源码下载
   - 后端工程：
-  > `git clone git@github.com:galaxy-future/SchedulX.git`
+  > `git clone git@github.com:galaxy-future/schedulx.git`
   - 代码下载完成后，修改配置文件`register/conf/config.yml`，填入云账号的Accesskey、Secret及Region信息。
 
 * (2)macOS系统部署
@@ -55,13 +55,13 @@ SchedulX依赖BridgX和BridgX_FE，请根据[安装指南](hhttps://github.com/g
 
 快速上手
 ------------
-通过[快速上手指南](https://github.com/galaxy-future/SchedulX/blob/master/docs/getting-started.md)，可以掌握基本的服务扩缩容流程。
+通过[快速上手指南](https://github.com/galaxy-future/schedulx/blob/master/docs/getting-started.md)，可以掌握基本的服务扩缩容流程。
 
 行为准则
 ------
-[贡献者公约](https://github.com/galaxy-future/SchedulX/blob/master/CODE_OF_CONDUCT.md)
+[贡献者公约](https://github.com/galaxy-future/schedulx/blob/master/CODE_OF_CONDUCT.md)
 
 授权
 -----
 
-SchedulX 使用[Apache License 2.0](https://github.com/galaxy-future/SchedulX/blob/master/README.md)授权协议进行授权
+SchedulX 使用[Apache License 2.0](https://github.com/galaxy-future/schedulx/blob/master/README.md)授权协议进行授权
