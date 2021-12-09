@@ -20,7 +20,7 @@ SchedulX 是基于开源 BridgX 项目的云原生服务编排和部署解决方
 
 2、环境依赖
 
-SchedulX依赖BridgX和BridgX_FE，请根据[安装指南](https://github.com/galaxy-future/bridgx/blob/dev/README.md)安装bridgx和comandx。要求内网部署环境，能够跟云厂商vpc连通。
+SchedulX依赖BridgX，请根据[安装指南](https://github.com/galaxy-future/bridgx/blob/dev/README.md)安装bridgx。要求内网部署环境，能够跟云厂商vpc连通。
 
 3、安装步骤
 
@@ -32,8 +32,6 @@ SchedulX依赖BridgX和BridgX_FE，请根据[安装指南](https://github.com/ga
 * (2)macOS系统部署
   - 后端部署,在SchedulX目录下运行
     > `make docker-run-mac`
-
-  - 系统运行，在浏览器中输入 http://127.0.0.1 可以看到管理控制台界面,初始用户名root和密码为123456。
 
 * (3)Linux安装部署
   - 1）针对使用者
@@ -51,11 +49,8 @@ SchedulX依赖BridgX和BridgX_FE，请根据[安装指南](https://github.com/ga
              > `docker-compose up -d schedulx`   //启动schedulx服务 <br>
              > `docker-compose down`     //停止SchedulX服务
 
-      - 系统运行，浏览器输入 `http://127.0.0.1` 可以看到管理控制台界面,初始用户名 root 和密码为123456。
-
-快速上手
-------------
-通过[快速上手指南](https://github.com/galaxy-future/schedulx/blob/master/docs/getting-started.md)，可以掌握基本的服务扩缩容流程。
+* (4)前端界面化操作
+如果需要使用web前端进行操作，请下载安装[ComandX](https://github.com/galaxy-future/comandx/blob/main/README.md)
 
 行为准则
 ------
