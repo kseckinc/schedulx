@@ -20,7 +20,7 @@ SchedulX 是基于开源 BridgX 项目的云原生服务编排和部署解决方
 
 2、环境依赖
 
-SchedulX依赖BridgX，请根据[安装指南](https://github.com/galaxy-future/bridgx/blob/dev/README.md)安装bridgx。要求内网部署环境，能够跟云厂商vpc连通。
+SchedulX依赖BridgX，请根据[BridgX安装指南](https://github.com/galaxy-future/bridgx/blob/dev/README.md)进行安装。要求内网部署环境，能够跟云厂商vpc连通。
 
 3、安装步骤
 
@@ -49,7 +49,8 @@ SchedulX依赖BridgX，请根据[安装指南](https://github.com/galaxy-future/
              > `docker-compose up -d schedulx`   //启动schedulx服务 <br>
              > `docker-compose down`     //停止SchedulX服务
 
-* (4)前端界面化操作
+4、前端界面化操作
+
 如果需要使用web前端进行操作，请下载安装[ComandX](https://github.com/galaxy-future/comandx/blob/main/README.md)
 
 行为准则
