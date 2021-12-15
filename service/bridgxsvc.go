@@ -224,7 +224,7 @@ func (s *BridgXSvc) shrinkAction(ctx context.Context, taskId int64, clusterName 
 	cliReq := &bridgxcli.ClusterShrinkReq{
 		TaskName:    fmt.Sprintf("schedulx 缩容 %v 台", len(ips)),
 		ClusterName: clusterName,
-		Ips:         ips,
+		//Ips:         ips, no need specify ip list
 		Count:       int64(len(instGroup.InstanceList)),
 	}
 	httpResp, err := bCli.ClusterShrink(ctx, cliReq)
