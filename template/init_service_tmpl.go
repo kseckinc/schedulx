@@ -22,6 +22,7 @@ Port={{.Params.Port}}
 {{if eq .Params.ImageStorageType "acr"}}
 echo "dock login" >> /root/result.log
 docker login --username={{.Params.Account}} --password={{.Params.Password}} $HarborUrl
+echo 'INSECURE_REGISTRY="--insecure-registry docker.io --insecure-registry '$HarborUrl'"' >> /etc/sysconfig/docker
 {{else}}
 echo 'INSECURE_REGISTRY="--insecure-registry docker.io --insecure-registry '$HarborUrl'"' >> /etc/sysconfig/docker
 {{end}}
