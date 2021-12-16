@@ -20,13 +20,14 @@ ImageUrl={{.Params.ImageUrl}}
 PSM={{.Params.ServiceName}}
 Port={{.Params.Port}}
 {{if eq .Params.ImageStorageType "acr"}}
+echo 'INSECURE_REGISTRY="--insecure-registry docker.io --insecure-registry '$HarborUrl'"' >> /etc/sysconfig/docker
+service docker restart >> /root/result.log
 echo "dock login" >> /root/result.log
 docker login --username={{.Params.Account}} --password={{.Params.Password}} $HarborUrl
-echo 'INSECURE_REGISTRY="--insecure-registry docker.io --insecure-registry '$HarborUrl'"' >> /etc/sysconfig/docker
 {{else}}
 echo 'INSECURE_REGISTRY="--insecure-registry docker.io --insecure-registry '$HarborUrl'"' >> /etc/sysconfig/docker
+service docker restart >> /root/result.log
 {{end}}
-service docker start >> /root/result.log
 
 docker pull $ImageUrl >> /root/result.log
 {{.DockerRun}} --name $PSM $ImageUrl >> /root/result.log
