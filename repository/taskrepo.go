@@ -160,3 +160,19 @@ func (r *TaskRepo) GetTask(ctx context.Context, taskId int64) (*db.Task, error) 
 
 	return obj, err
 }
+
+func (r *TaskRepo) GetBridgXTaskId(ctx context.Context, taskId int64) (int64, error) {
+	var err error
+	task, err := r.GetTask(ctx, taskId)
+	if err != nil {
+		log.Logger.Error(err)
+		return 0, err
+	}
+	relationIds := &types.RelationTaskId{}
+	err = jsoniter.Unmarshal([]byte(task.RelationTaskId), relationIds)
+	if err != nil {
+		log.Logger.Error(err)
+		return 0, err
+	}
+	return relationIds.BridgXTaskId, nil
+}

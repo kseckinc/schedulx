@@ -168,7 +168,7 @@ func (s *TaskService) Info(ctx context.Context, svcReq *TaskInfoSvcReq) (*TaskIn
 	}, nil
 }
 
-func (s *TaskService) InstanceList(ctx context.Context, page, pageSize, taskId int, taskStatus types.InstanceStatus) (int64, []types.InstInfoResp, error) {
+func (s *TaskService) InstanceList(ctx context.Context, page, pageSize int, taskId int64, taskStatus types.InstanceStatus) (int64, []types.InstInfoResp, error) {
 	fields := []string{"instance_id", "ip_inner", "ip_outer", "instance_status"}
 	if page == 0 {
 		page = 1
@@ -176,13 +176,13 @@ func (s *TaskService) InstanceList(ctx context.Context, page, pageSize, taskId i
 	if pageSize == 0 || pageSize > 500 {
 		pageSize = 500
 	}
-	list, count, err := repository.GetInstanceRepoIns().InstsQueryByPage(ctx, int64(taskId), taskStatus, pageSize, page, fields)
+	list, count, err := repository.GetInstanceRepoIns().InstsQueryByPage(ctx, taskId, taskStatus, pageSize, page, fields)
 	if err != nil {
 		log.Logger.Errorf("error:%v", err)
 		return 0, nil, err
 	}
 
-	instanceInfo := make([]types.InstInfoResp, len(list))
+	instanceInfo := make([]types.InstInfoResp, 0, len(list))
 	for _, item := range list {
 		info := types.InstInfoResp{
 			InstanceId: item.InstanceId,
