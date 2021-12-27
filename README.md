@@ -1,5 +1,14 @@
 # **SchedulX**
 
+
+语言(language)
+----
+
+[English](https://github.com/galaxy-future/bridgx/blob/dev/docs/EN-README.md)
+
+简介
+--------
+
 SchedulX 是基于开源 BridgX 项目的云原生服务编排和部署解决方案，目标是让开发者在 BridgX 获取的计算资源上进行服务编排和部署。
 
 它具有如下关键特性:
