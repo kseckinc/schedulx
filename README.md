@@ -4,7 +4,7 @@
 语言(language)
 ----
 
-[English](https://github.com/galaxy-future/bridgx/blob/dev/docs/EN-README.md)
+[English](https://github.com/galaxy-future/schedulx/blob/master/docs/EN-README.md)
 
 简介
 --------
