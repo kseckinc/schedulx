@@ -49,7 +49,7 @@ SchedulX relies on BridgX, so please follow the [BridgX Installation Guide](http
 
 4.Front-end Interface Operation
 
-If you need to use the web-based front-end to perform any operations, please download and install [ComandX](https://github.com/galaxy-future/comandx/blob/main/README.md).
+If you need to use the web-based front-end to perform any operations, please download and install [ComandX](https://github.com/galaxy-future/comandx/blob/main/docs/EN-README.md).
 
 Code of Conduct
 ------
