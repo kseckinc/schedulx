@@ -69,11 +69,11 @@ type TaskInstancesResp struct {
 	Data *bridgx.TaskInstancesData `json:"data"`
 }
 
-type GetCLusterByNameReq struct {
+type GetClusterByNameReq struct {
 	ClusterName string
 }
 
-type GetCLusterByNameResp struct {
+type GetClusterByNameResp struct {
 	client.HttpResp
 	Data *bridgx.ClusterInfo `json:"data"`
 }
@@ -244,8 +244,8 @@ func (c *BridgXClient) TaskInstances(ctx context.Context, cliReq *TaskInstancesR
 	return resp, err
 }
 
-func (c *BridgXClient) GetCLusterByName(ctx context.Context, cliReq *GetCLusterByNameReq) (resp *GetCLusterByNameResp, err error) {
-	resp = &GetCLusterByNameResp{}
+func (c *BridgXClient) GetClusterByName(ctx context.Context, cliReq *GetClusterByNameReq) (resp *GetClusterByNameResp, err error) {
+	resp = &GetClusterByNameResp{}
 	if cliReq.ClusterName == "" {
 		err = client.ErrParamsMissing
 		log.Logger.Error(err, ":cluster_name")

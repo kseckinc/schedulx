@@ -5,10 +5,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/galaxy-future/schedulx/pkg/tool"
-
 	"github.com/galaxy-future/schedulx/api/types"
+	"github.com/galaxy-future/schedulx/pkg/tool"
 	"github.com/galaxy-future/schedulx/register/config"
+	"github.com/galaxy-future/schedulx/register/config/client"
 	"github.com/galaxy-future/schedulx/register/config/log"
 	"github.com/galaxy-future/schedulx/repository/model/db"
 	jsoniter "github.com/json-iterator/go"
@@ -41,6 +41,18 @@ func (r *TaskRepo) GetLastExpandSuccTask(ctx context.Context, tmplId int64) (*db
 		return nil, err
 	}
 	return obj, nil
+}
+
+func (r *TaskRepo) CountByCond(ctx context.Context, schedTmplIds []int64, status []string) (int64, error) {
+	where := map[string]interface{}{
+		"sched_tmpl_id": schedTmplIds,
+		"task_status":   status,
+	}
+	var cnt int64
+	if err := client.ReadDBCli.Where(where).Model(&db.Task{}).Count(&cnt).Error; err != nil {
+		return 0, err
+	}
+	return cnt, nil
 }
 
 func (r *TaskRepo) CreateTask(ctx context.Context, schedTmplId, instCnt int64, operator, execType string) (int64, error) {

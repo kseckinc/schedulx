@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
 	"github.com/galaxy-future/schedulx/api/types"
@@ -193,4 +194,28 @@ func (s *TaskService) InstanceList(ctx context.Context, page, pageSize int, task
 		instanceInfo = append(instanceInfo, info)
 	}
 	return count, instanceInfo, nil
+}
+
+func (s *TaskService) HasRunningTask(ctx context.Context, serviceName, clusterName string) (bool, error) {
+	serviceClusters, err := repository.GetServiceRepoInst().GetServiceClusters(ctx, serviceName, clusterName)
+	if err != nil || len(serviceClusters) == 0 {
+		return false, fmt.Errorf("cluster not found, service:%v, cluster:%v", serviceName, clusterName)
+	}
+	clusterIds := make([]int64, 0, len(serviceClusters))
+	for _, cluster := range serviceClusters {
+		clusterIds = append(clusterIds, cluster.Id)
+	}
+	tmpls, err := repository.GetScheduleTemplateRepoInst().GetAllTmplsBySvcClusterId(clusterIds)
+	if err != nil || len(tmpls) == 0 {
+		return false, fmt.Errorf("templates not found, cluster_ids:%v", clusterIds)
+	}
+	schedTmplIds := make([]int64, 0, len(tmpls))
+	for _, tmpl := range tmpls {
+		schedTmplIds = append(schedTmplIds, tmpl.Id)
+	}
+	cnt, err := repository.GetTaskRepoInst().CountByCond(ctx, schedTmplIds, []string{types.TaskStatusRunning, types.TaskStatusInit})
+	if err != nil {
+		return false, err
+	}
+	return cnt > 0, nil
 }

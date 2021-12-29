@@ -13,6 +13,7 @@ import (
 	"github.com/galaxy-future/schedulx/pkg/nodeact"
 	"github.com/galaxy-future/schedulx/pkg/tool"
 	"github.com/galaxy-future/schedulx/register/config/log"
+	"github.com/galaxy-future/schedulx/repository"
 	"github.com/spf13/cast"
 )
 
@@ -79,7 +80,7 @@ func (s *BridgXSvc) ExecAct(ctx context.Context, args interface{}, act types.Act
 	case s.Shrink:
 		resp, err = s.shrinkAction(ctx, svcReq.TaskId, svcReq.ClusterName, svcReq.InstGroup)
 	case s.PoolQueryShrink:
-		resp, err = s.poolQueryShrinkAction(ctx, svcReq.TaskId)
+		resp, err = s.pollQueryShrinkAction(ctx, svcReq.TaskId, svcReq.InstGroup)
 	case s.GetCluster:
 		resp, err = s.getClusterAction(ctx, svcReq.ClusterName)
 	default:
@@ -221,7 +222,7 @@ func (s *BridgXSvc) shrinkAction(ctx context.Context, taskId int64, clusterName 
 	cliReq := &bridgxcli.ClusterShrinkReq{
 		TaskName:    fmt.Sprintf("schedulx 缩容 %v 台", len(ips)),
 		ClusterName: clusterName,
-		//Ips:         ips, no need specify ip list
+		Ips:         ips,
 		Count:       int64(len(instGroup.InstanceList)),
 	}
 	httpResp, err := bCli.ClusterShrink(ctx, cliReq)
@@ -233,7 +234,7 @@ func (s *BridgXSvc) shrinkAction(ctx context.Context, taskId int64, clusterName 
 	return resp, err
 }
 
-func (s *BridgXSvc) poolQueryShrinkAction(ctx context.Context, taskId int64) (*BridgXSvcResp, error) {
+func (s *BridgXSvc) pollQueryShrinkAction(ctx context.Context, taskId int64, instances *nodeact.InstanceGroup) (*BridgXSvcResp, error) {
 	var err error
 	resp := &BridgXSvcResp{}
 	bCli := bridgxcli.GetBridgXCli(ctx)
@@ -284,6 +285,17 @@ func (s *BridgXSvc) poolQueryShrinkAction(ctx context.Context, taskId int64) (*B
 		log.Logger.Error(err)
 		return nil, err
 	}
+	var ids []string
+	for _, instance := range instances.InstanceList {
+		ids = append(ids, instance.InstanceId)
+	}
+	if len(ids) == 0 {
+		return resp, nil
+	}
+	_, err = repository.GetInstanceRepoIns().BatchUpdateStatusByIds(ctx, ids, types.InstanceStatusDeleted)
+	if err != nil {
+		return nil, err
+	}
 	return resp, nil
 }
 
@@ -291,10 +303,10 @@ func (s *BridgXSvc) getClusterAction(ctx context.Context, clusterName string) (*
 	var err error
 	resp := &BridgXSvcResp{}
 	bCli := bridgxcli.GetBridgXCli(ctx)
-	cliReq := &bridgxcli.GetCLusterByNameReq{
+	cliReq := &bridgxcli.GetClusterByNameReq{
 		ClusterName: clusterName,
 	}
-	httpResp, err := bCli.GetCLusterByName(ctx, cliReq)
+	httpResp, err := bCli.GetClusterByName(ctx, cliReq)
 	if err != nil {
 		return nil, err
 	}
