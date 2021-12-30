@@ -24,7 +24,7 @@ func Init() *gin.Engine {
 		router = gin.Default()
 	}
 	router.GET("/", func(context *gin.Context) {
-		context.String(http.StatusOK, "NodeAct")
+		context.String(http.StatusOK, "SchedulX")
 	})
 
 	v1Api := router.Group("/api/v1/")

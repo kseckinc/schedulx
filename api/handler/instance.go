@@ -3,6 +3,9 @@ package handler
 import (
 	"net/http"
 
+	"github.com/galaxy-future/schedulx/repository"
+	"github.com/spf13/cast"
+
 	"github.com/galaxy-future/schedulx/api/types"
 	"github.com/galaxy-future/schedulx/service"
 	"github.com/gin-gonic/gin"
@@ -26,7 +29,12 @@ func (t *Task) InstanceList(ctx *gin.Context) {
 		MkResponse(ctx, http.StatusBadRequest, errParamInvalid, "task_id empty")
 		return
 	}
-	total, instances, err := service.GetTaskSvcInst().InstanceList(ctx, req.PageNum, req.PageSize, req.TaskId, types.InstanceStatus(req.InstanceStatus))
+	taskId, err := repository.GetTaskRepoInst().GetBridgXTaskId(ctx, cast.ToInt64(req.TaskId))
+	if err != nil {
+		MkResponse(ctx, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+	total, instances, err := service.GetTaskSvcInst().InstanceList(ctx, req.PageNum, req.PageSize, taskId, types.InstanceStatus(req.InstanceStatus))
 	if err != nil {
 		MkResponse(ctx, http.StatusInternalServerError, err.Error(), nil)
 		return
