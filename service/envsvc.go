@@ -106,7 +106,11 @@ func (s *EnvService) BaseEnvInitSingle(ctx context.Context, taskId int64, inst *
 		_ = s.CallBackSvc(ctx, taskId, inst.InstanceId, instanceStatus, msg)
 	}()
 	localCmd := template.GetInitBaseCmd()
-	res, err := RemoteCmdExec(ctx, localCmd, _remoteBaseEnvScript, inst.IpInner, auth.UserName, auth.Pwd)
+	sshIp := inst.IpInner
+	if inst.IpOuter != "" {
+		sshIp = inst.IpOuter
+	}
+	res, err := RemoteCmdExec(ctx, localCmd, _remoteBaseEnvScript, sshIp, auth.UserName, auth.Pwd)
 	if err != nil {
 		instanceStatus = types.InstanceStatusFail
 		log.Logger.Error("RemoteCmdExec", err)
@@ -164,8 +168,11 @@ func (s *EnvService) ServiceEnvInitSingle(ctx context.Context, taskId int64, ins
 		log.Logger.Error("GetInitServiceCmd", err)
 		return err
 	}
-
-	res, err := RemoteCmdExec(ctx, localCmd, _remoteServiceEnvScript, inst.IpInner, auth.UserName, auth.Pwd)
+	sshIp := inst.IpInner
+	if inst.IpOuter != "" {
+		sshIp = inst.IpOuter
+	}
+	res, err := RemoteCmdExec(ctx, localCmd, _remoteServiceEnvScript, sshIp, auth.UserName, auth.Pwd)
 	if err != nil {
 		instanceStatus = types.InstanceStatusFail
 		log.Logger.Error("RemoteCmdExec", err)
