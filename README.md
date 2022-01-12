@@ -35,7 +35,7 @@ SchedulX依赖BridgX，请根据[BridgX安装指南](https://github.com/galaxy-f
 
 * (1)源码下载
   - 后端工程：
-  > `git clone git@github.com:galaxy-future/schedulx.git`
+  > `git clone https://github.com/galaxy-future/schedulx.git`
   - 代码下载完成后，修改配置文件`register/conf/config.yml`，填入云账号的Accesskey、Secret及Region信息。
 
 * (2)macOS系统部署
@@ -46,7 +46,6 @@ SchedulX依赖BridgX，请根据[BridgX安装指南](https://github.com/galaxy-f
   - 1）针对使用者
     - 后端部署,在SchedulX目录下运行,
       > `make docker-run-linux`
-    - 系统运行，浏览器输入 `http://127.0.0.1 `可以看到管理控制台界面,初始用户名 `root`和密码为`123456`。
 
   - 2）针对开发者
     - 后端部署
