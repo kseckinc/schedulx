@@ -23,6 +23,6 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/pkg/errors v0.9.1
 	github.com/pkg/sftp v1.13.4
-	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
+	golang.org/x/crypto v0.1.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 )
